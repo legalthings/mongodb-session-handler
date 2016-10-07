@@ -1,5 +1,33 @@
 {
+    "name": "legalthings/mongodb-session-handler",
+    "description": "A session handler that stores structured data in MongoDB",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "LegalThings",
+            "email": "info@legalthings.io",
+            "homepage": "http://www.legalthings.io"
+        },
+        {
+            "name": "Arnold Daniels",
+            "email": "arnold@jasny.net",
+            "homepage": "http://www.jasny.net"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/legalthings/mongodb-session-handler/issues",
+        "source": "https://github.com/legalthings/mongodb-session-handler"
+    },
+    "require": {
+        "php": ">=5.6.0",
+        "ext-mongo": "*",
+    },
     "require-dev": {
         "phpunit/phpunit": "^5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "LegalThings\\": "src/"
+        }
     }
 }
