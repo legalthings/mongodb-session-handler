@@ -1,2 +1,28 @@
-# QueryableSession
-Interface for queryable sessions
+# MongoDB session handler
+
+The LegalThings MongoDB session handler stores sessions as structured data in MongoDB. This allows a process to fetch
+and modify or remove a session based on its data.
+
+## Use cases
+
+### Remove user sessions when a password changes
+
+When you change your password, you want to remove all the other sessions of the user. This is a security measure, the
+old password may be comprimised and a hacker may already have logged in. Without invalidating his session, he can
+continue to use the user account even after the password has changed.
+
+### Cache and update user information
+
+For performance reasons you might store the user's information like name, image, team name, etc in the session. When
+a team changes it's name, you want to find all the sessions of the users within that team and update the information.
+
+## Installation
+
+```
+composer require legalthings/mongodb-session-handler
+```
+
+**This libary uses the legacy Mongo driver.** If you're running PHP7 or simply are already using the new MongoDB
+driver, please install [`alcaeus/mongo-php-adapter`](https://packagist.org/packages/alcaeus/mongo-php-adapter).
+
+
