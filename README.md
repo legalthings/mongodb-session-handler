@@ -1,4 +1,9 @@
-# MongoDB session handler
+MongoDB session handler
+===
+
+[![Build Status](https://travis-ci.org/legalthings/mongodb-session-handler.svg?branch=master)](https://travis-ci.org/legalthings/mongodb-session-handler)
+[![Code Coverage](https://scrutinizer-ci.com/g/legalthings/mongodb-session-handler/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/legalthings/mongodb-session-handler/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/legalthings/mongodb-session-handler/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/legalthings/mongodb-session-handler/?branch=master)
 
 The LegalThings MongoDB session handler stores sessions as structured data in MongoDB. This allows a process to fetch
 and modify or remove a session based on its data.
