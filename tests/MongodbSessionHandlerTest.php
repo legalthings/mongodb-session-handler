@@ -57,6 +57,19 @@ class MongodbSessionHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['foo' => 'bar', 'zoo' => 'ram'], $_SESSION);
     }
     
+    public function testReadNotFound()
+    {
+        $collection = $this->createMock(\MongoCollection::class);
+        $handler = new MongodbSessionHandler($collection);
+        
+        $collection->expects($this->once())->method('findOne')
+            ->with(['_id' => '9876'])
+            ->willReturn(null);
+        
+        $handler->read('9876');
+        $this->assertEquals([], $_SESSION);
+    }
+    
     public function testWrite()
     {
         $collection = $this->createMock(\MongoCollection::class);

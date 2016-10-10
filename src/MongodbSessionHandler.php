@@ -65,13 +65,18 @@ class MongodbSessionHandler implements \SessionHandlerInterface
     public function read($session_id)
     {
         $values = $this->collection->findOne(['_id' => $session_id]);
+        
+        if (empty($values)) {
+            return;
+        }
+        
         unset($values['_id']);
 
         foreach ($values as $key => $value) {
             $_SESSION[$key] = $value;
         }
 
-        return false;
+        return '';
     }
 
     /**
