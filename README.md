@@ -30,4 +30,14 @@ composer require legalthings/mongodb-session-handler
 **This libary uses the legacy Mongo driver.** If you're running PHP7 or simply are already using the new MongoDB
 driver, please install [`alcaeus/mongo-php-adapter`](https://packagist.org/packages/alcaeus/mongo-php-adapter).
 
+## Usage
 
+```php
+$mongo = new MongoClient();
+$collection = $mongo->some_db->sessions;
+$handler = new MongodbSessionHandler($collection);
+
+session_set_save_handler($handler);
+```
+
+To create read-only sessions use `new MongodbSessionHandler($collection, 'r')`
