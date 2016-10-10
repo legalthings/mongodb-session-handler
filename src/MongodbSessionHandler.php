@@ -67,7 +67,7 @@ class MongodbSessionHandler implements \SessionHandlerInterface
         $values = $this->collection->findOne(['_id' => $session_id]);
         
         if (empty($values)) {
-            return;
+            return '';
         }
         
         unset($values['_id']);
