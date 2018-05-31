@@ -42,6 +42,7 @@ class MongodbSessionHandler implements \SessionHandlerInterface
      */
     public function open($save_path, $name)
     {
+        return true;
     }
 
     /**
@@ -53,6 +54,7 @@ class MongodbSessionHandler implements \SessionHandlerInterface
     public function close()
     {
         unset($_SESSION);
+        return true;
     }
 
     /**
@@ -90,10 +92,12 @@ class MongodbSessionHandler implements \SessionHandlerInterface
     public function write($session_id, $session_data)
     {
         if ($this->readonly) {
-            return;
+            return true;
         }
         
         $this->collection->insertOne(['_id' => $session_id] + $_SESSION);
+
+        return true;
     }
 
     /**
@@ -106,10 +110,11 @@ class MongodbSessionHandler implements \SessionHandlerInterface
     public function destroy($session_id)
     {
         if ($this->readonly) {
-            return;
+            return true;
         }
         
         $this->collection->deleteOne(['_id' => $session_id]);
+        return true;
     }
 
     /**

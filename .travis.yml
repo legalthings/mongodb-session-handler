@@ -9,7 +9,7 @@ branches:
 
 before_install:
     # Install MongoDB PHP extension (comes preinstalled with php7)
-    - pecl install -f mongodb-1.4.1'
+    - pecl install -f mongodb-1.4.1
     - echo "extension = mongodb.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 install:
