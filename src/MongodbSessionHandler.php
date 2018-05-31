@@ -9,7 +9,7 @@ class MongodbSessionHandler implements \SessionHandlerInterface
 {
     /**
      * Session collection
-     * @var \MongoCollection
+     * @var \MongoDB\Collection
      */
     protected $collection;
 
@@ -23,10 +23,10 @@ class MongodbSessionHandler implements \SessionHandlerInterface
     /**
      * Class constructor
      * 
-     * @param \MongoCollection $collection
-     * @param string           $mode        'w' for read-write or 'r' for read-only
+     * @param \MongoDB\Collection $collection
+     * @param string              $mode        'w' for read-write or 'r' for read-only
      */
-    public function __construct(\MongoCollection $collection, $mode = 'w')
+    public function __construct(\MongoDB\Collection $collection, $mode = 'w')
     {
         $this->collection = $collection;
         $this->readonly = ($mode === 'r');
@@ -93,7 +93,7 @@ class MongodbSessionHandler implements \SessionHandlerInterface
             return;
         }
         
-        $this->collection->save(['_id' => $session_id] + $_SESSION);
+        $this->collection->insertOne(['_id' => $session_id] + $_SESSION);
     }
 
     /**
@@ -109,7 +109,7 @@ class MongodbSessionHandler implements \SessionHandlerInterface
             return;
         }
         
-        $this->collection->remove(['_id' => $session_id]);
+        $this->collection->deleteOne(['_id' => $session_id]);
     }
 
     /**

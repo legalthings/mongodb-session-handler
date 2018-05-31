@@ -14,7 +14,7 @@ class MongodbSessionHandlerTest extends \PHPUnit_Framework_TestCase
         session_cache_limiter('');
         ini_set('session.use_cookies', 0);
         ini_set('session.use_only_cookies', 0);
-        
+
         session_start();
     }
     
@@ -28,7 +28,7 @@ class MongodbSessionHandlerTest extends \PHPUnit_Framework_TestCase
     
     public function testOpen()
     {
-        $collection = $this->createMock(\MongoCollection::class);
+        $collection = $this->createMock(\MongoDB\Collection::class);
         $handler = new MongodbSessionHandler($collection);
         
         $handler->open('', '');
@@ -36,7 +36,7 @@ class MongodbSessionHandlerTest extends \PHPUnit_Framework_TestCase
     
     public function testClose()
     {
-        $collection = $this->createMock(\MongoCollection::class);
+        $collection = $this->createMock(\MongoDB\Collection::class);
         $handler = new MongodbSessionHandler($collection);
         
         $handler->close();
@@ -46,7 +46,7 @@ class MongodbSessionHandlerTest extends \PHPUnit_Framework_TestCase
     
     public function testRead()
     {
-        $collection = $this->createMock(\MongoCollection::class);
+        $collection = $this->createMock(\MongoDB\Collection::class);
         $handler = new MongodbSessionHandler($collection);
         
         $collection->expects($this->once())->method('findOne')
@@ -59,7 +59,7 @@ class MongodbSessionHandlerTest extends \PHPUnit_Framework_TestCase
     
     public function testReadNotFound()
     {
-        $collection = $this->createMock(\MongoCollection::class);
+        $collection = $this->createMock(\MongoDB\Collection::class);
         $handler = new MongodbSessionHandler($collection);
         
         $collection->expects($this->once())->method('findOne')
@@ -72,10 +72,10 @@ class MongodbSessionHandlerTest extends \PHPUnit_Framework_TestCase
     
     public function testWrite()
     {
-        $collection = $this->createMock(\MongoCollection::class);
+        $collection = $this->createMock(\MongoDB\Collection::class);
         $handler = new MongodbSessionHandler($collection);
         
-        $collection->expects($this->once())->method('save')
+        $collection->expects($this->once())->method('insertOne')
             ->with(['_id' => '1234', 'foo' => 'bar']);
         
         $_SESSION['foo'] = 'bar';
@@ -84,10 +84,10 @@ class MongodbSessionHandlerTest extends \PHPUnit_Framework_TestCase
     
     public function testWriteReadOnly()
     {
-        $collection = $this->createMock(\MongoCollection::class);
+        $collection = $this->createMock(\MongoDB\Collection::class);
         $handler = new MongodbSessionHandler($collection, 'r');
         
-        $collection->expects($this->never())->method('save');
+        $collection->expects($this->never())->method('insertOne');
         
         $_SESSION['foo'] = 'bar';
         $handler->write('1234', serialize(['not' => 'used']));
@@ -95,10 +95,10 @@ class MongodbSessionHandlerTest extends \PHPUnit_Framework_TestCase
     
     public function testDestroy()
     {
-        $collection = $this->createMock(\MongoCollection::class);
+        $collection = $this->createMock(\MongoDB\Collection::class);
         $handler = new MongodbSessionHandler($collection);
         
-        $collection->expects($this->once())->method('remove')
+        $collection->expects($this->once())->method('deleteOne')
             ->with(['_id' => '1234']);
         
         $_SESSION['foo'] = 'bar';
@@ -107,10 +107,10 @@ class MongodbSessionHandlerTest extends \PHPUnit_Framework_TestCase
     
     public function testDestroyReadOnly()
     {
-        $collection = $this->createMock(\MongoCollection::class);
+        $collection = $this->createMock(\MongoDB\Collection::class);
         $handler = new MongodbSessionHandler($collection, 'r');
         
-        $collection->expects($this->never())->method('remove');
+        $collection->expects($this->never())->method('deleteOne');
         
         $_SESSION['foo'] = 'bar';
         $handler->destroy('1234');
@@ -118,7 +118,7 @@ class MongodbSessionHandlerTest extends \PHPUnit_Framework_TestCase
     
     public function testGc()
     {
-        $collection = $this->createMock(\MongoCollection::class);
+        $collection = $this->createMock(\MongoDB\Collection::class);
         $handler = new MongodbSessionHandler($collection);
         
         $handler->gc(3600);
@@ -126,7 +126,7 @@ class MongodbSessionHandlerTest extends \PHPUnit_Framework_TestCase
     
     public function testCreateSid()
     {
-        $collection = $this->createMock(\MongoCollection::class);
+        $collection = $this->createMock(\MongoDB\Collection::class);
         $handler = new MongodbSessionHandler($collection);
         
         $sid = $handler->create_sid();
