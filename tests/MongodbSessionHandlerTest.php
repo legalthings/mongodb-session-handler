@@ -20,8 +20,9 @@ class MongodbSessionHandlerTest extends \PHPUnit_Framework_TestCase
     
     public function tearDown()
     {
-        $void = function() {};
-        session_set_save_handler($void, $void, $void, $void, $void, $void, $void);
+        $void = function() {return true;};
+        $voidString = function() {return '';};
+        session_set_save_handler($void, $void, $voidString, $void, $void, $void, $void);
         session_abort();
     }
     
