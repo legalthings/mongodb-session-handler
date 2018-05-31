@@ -18,8 +18,9 @@ class FunctionalTest extends \PHPUnit_Framework_TestCase
     
     public function tearDown()
     {
-        $void = function() {};
-        session_set_save_handler($void, $void, $void, $void, $void, $void, $void);
+        $void = function() {return true;};
+        $voidString = function() {return '';};
+        session_set_save_handler($void, $void, $voidString, $void, $void, $void, $void);
         session_abort();
     }
     
@@ -30,13 +31,13 @@ class FunctionalTest extends \PHPUnit_Framework_TestCase
         ini_set('session.use_cookies', 0);
         ini_set('session.use_only_cookies', 0);
         
-        $collection = $this->createMock(\MongoCollection::class);
+        $collection = $this->createMock(\MongoDB\Collection::class);
 
         $collection->expects($this->once())->method('findOne')
             ->with(['_id' => '1234'])
             ->willReturn(['_id' => '1234', 'foo' => 'bar', 'zoo' => 'ram']);
         
-        $collection->expects($this->once())->method('save')
+        $collection->expects($this->once())->method('insertOne')
             ->willReturn(['_id' => '1234', 'foo' => 'bar', 'zoo' => 'ram', 'col' => 'pan']);
         
         $handler = new MongodbSessionHandler($collection);
@@ -60,13 +61,13 @@ class FunctionalTest extends \PHPUnit_Framework_TestCase
         ini_set('session.use_cookies', 0);
         ini_set('session.use_only_cookies', 0);
         
-        $collection = $this->createMock(\MongoCollection::class);
+        $collection = $this->createMock(\MongoDB\Collection::class);
 
         $collection->expects($this->once())->method('findOne')
             ->with(['_id' => '1234'])
             ->willReturn(['_id' => '1234', 'foo' => 'bar', 'zoo' => 'ram']);
         
-        $collection->expects($this->never())->method('save');
+        $collection->expects($this->never())->method('insertOne');
         
         $handler = new MongodbSessionHandler($collection);
         session_set_save_handler($handler);

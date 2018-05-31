@@ -9,7 +9,7 @@ class MongodbSessionHandler implements \SessionHandlerInterface
 {
     /**
      * Session collection
-     * @var \MongoCollection
+     * @var \MongoDB\Collection
      */
     protected $collection;
 
@@ -23,10 +23,10 @@ class MongodbSessionHandler implements \SessionHandlerInterface
     /**
      * Class constructor
      * 
-     * @param \MongoCollection $collection
-     * @param string           $mode        'w' for read-write or 'r' for read-only
+     * @param \MongoDB\Collection $collection
+     * @param string              $mode        'w' for read-write or 'r' for read-only
      */
-    public function __construct(\MongoCollection $collection, $mode = 'w')
+    public function __construct(\MongoDB\Collection $collection, $mode = 'w')
     {
         $this->collection = $collection;
         $this->readonly = ($mode === 'r');
@@ -42,6 +42,7 @@ class MongodbSessionHandler implements \SessionHandlerInterface
      */
     public function open($save_path, $name)
     {
+        return true;
     }
 
     /**
@@ -53,6 +54,7 @@ class MongodbSessionHandler implements \SessionHandlerInterface
     public function close()
     {
         unset($_SESSION);
+        return true;
     }
 
     /**
@@ -90,10 +92,12 @@ class MongodbSessionHandler implements \SessionHandlerInterface
     public function write($session_id, $session_data)
     {
         if ($this->readonly) {
-            return;
+            return true;
         }
         
-        $this->collection->save(['_id' => $session_id] + $_SESSION);
+        $this->collection->insertOne(['_id' => $session_id] + $_SESSION);
+
+        return true;
     }
 
     /**
@@ -106,10 +110,11 @@ class MongodbSessionHandler implements \SessionHandlerInterface
     public function destroy($session_id)
     {
         if ($this->readonly) {
-            return;
+            return true;
         }
         
-        $this->collection->remove(['_id' => $session_id]);
+        $this->collection->deleteOne(['_id' => $session_id]);
+        return true;
     }
 
     /**

@@ -1,14 +1,16 @@
 language: php
 
 php:
-  - 5.6
+  - 7.1
 
 branches:
   only:
     - master
 
 before_install:
-    - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+    # Install MongoDB PHP extension (comes preinstalled with php7)
+    - pecl install -f mongodb-1.4.1
+    - echo "extension = mongodb.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 install:
   - composer install
